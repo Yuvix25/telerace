@@ -7,7 +7,9 @@ const ToggleList = (props: {
   default: Set<string>;
   setChecked: (checked: Set<string>) => void;
 }) => {
-  const [checkedElements, setChecked] = React.useState<Set<string>>(props.default);
+  const [checkedElements, setChecked] = React.useState<Set<string>>(
+    props.default,
+  );
 
   const toggle = (element: string) => {
     const newChecked = new Set(checkedElements);

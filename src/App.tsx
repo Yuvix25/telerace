@@ -23,7 +23,7 @@ function asRadians(degrees: number) {
 }
 function geoToMeters(
   relativeNullPoint: { latitude: number; longitude: number },
-  p: { latitude: number; longitude: number }
+  p: { latitude: number; longitude: number },
 ) {
   const deltaLatitude = p.latitude - relativeNullPoint.latitude;
   const deltaLongitude = p.longitude - relativeNullPoint.longitude;
@@ -38,7 +38,7 @@ const App = () => {
   const [session, setSession] = React.useState<TelemetrySession>();
   const [lapsChecked, setLapsChecked] = React.useState<number[]>([]);
   const [channelsChecked, setChannelsChecked] = React.useState<Set<string>>(
-    new Set<string>(['GPS Speed'])
+    new Set<string>(['GPS Speed']),
   );
 
   // these two need to be separate because otherwise both graphs get updated, which fires the interaction callback again, resulting in an infinite loop
@@ -78,7 +78,7 @@ const App = () => {
             {
               latitude: d[REQUIRED_CHANNELS.Latitude],
               longitude: d[REQUIRED_CHANNELS.Longitude],
-            }
+            },
           );
           res.Distance = d.Distance;
           return res;
@@ -98,7 +98,7 @@ const App = () => {
         };
       }),
     }),
-    [lapsChecked, mapPointRadiuses, session]
+    [lapsChecked, mapPointRadiuses, session],
   );
 
   const graphData = useMemo<ChartData<'scatter'>>(
@@ -126,25 +126,25 @@ const App = () => {
         };
       }),
     }),
-    [combinations, graphPointRadiuses]
+    [combinations, graphPointRadiuses],
   );
 
   const originalXInteraction = useMemo(() => Interaction.modes.x, []);
   const originalNearestInteraction = useMemo(
     () => Interaction.modes.nearest,
-    []
+    [],
   );
   useEffect(() => {
     const interactionProxy = (
       originalInteraction: any,
       setState: (pointRadiuses: Record<number, number>) => void,
-      clearState: () => void
+      clearState: () => void,
     ) => {
       return (
         chart: Chart,
         e: ChartEvent,
         options: any,
-        useFinalPosition?: boolean
+        useFinalPosition?: boolean,
       ) => {
         const res = originalInteraction(chart, e, options, useFinalPosition);
         if (res == null || res.length === 0) {
@@ -167,7 +167,7 @@ const App = () => {
           return;
         }
         setGraphPointRadiuses({});
-      }
+      },
     );
     Interaction.modes.nearest = interactionProxy(
       originalNearestInteraction,
@@ -177,7 +177,7 @@ const App = () => {
           return;
         }
         setMapPointRadiuses({});
-      }
+      },
     );
   }, [graphPointRadiuses, mapPointRadiuses]);
 
@@ -227,7 +227,7 @@ const App = () => {
         },
       },
     }),
-    []
+    [],
   );
 
   const mapOptions = useMemo<ChartOptions<'scatter'>>(
@@ -267,7 +267,7 @@ const App = () => {
         },
       },
     }),
-    []
+    [],
   );
 
   return (
@@ -386,11 +386,18 @@ const App = () => {
             </div>
           </div>
 
-          <div style={{ minHeight: '400px', flexGrow: 3, width: 'max-content'}}>
+          <div
+            style={{
+              minHeight: '400px',
+              flexGrow: 3,
+              width: '100%',
+              height: '100%',
+            }}
+          >
             <Scatter
               data={mapData}
               options={mapOptions}
-              style={{ minHeight: 0 }}
+              style={{ minHeight: 0, width: '100%', height: '100%' }}
               ref={mapRef}
             />
           </div>
